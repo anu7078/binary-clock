@@ -1,0 +1,114 @@
+<html>
+    <head>
+
+        <title></title>
+        <style>
+.binary-clock{
+  width: min(20rem, 100%);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(6,1fr);
+  --gap: 1.25rem;
+  gap: var(--gap);
+  --colorH: #ff187c;
+  --colorM: #09fff4;
+  --colorS: #80ff09;
+}
+.binary-clock > span {
+  grid-column-end: span 2;
+  text-align: center;
+  color: var(--color);
+  text-shadow: 2px 2px 4px hsl(0 0% 0%)
+}
+[data-digit]::after {
+  content: attr(data-digit);
+  color: var(--color);
+  text-align: center;
+  text-shadow: 2px 2px 4px hsl(0 0% 0%)
+}
+[data-digit] { 
+  display: grid;
+  gap: var(--gap);
+}
+[data-digit] > i {
+  box-shadow:
+    inset -0.5rem -0.5rem 1rem hsl(0 0% 0% / .5),
+    inset 0.5rem 0.5rem 1rem hsl(0 0% 100% / .125),
+    0 0 2rem var(--active-color, transparent);
+  aspect-ratio: 1/1;
+  background-color: var(--active-color, transparent);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.5s, box-shadow 0.5s
+}
+[data-digit="1"] > i:nth-of-type(4), 
+[data-digit="2"] > i:nth-of-type(3),
+[data-digit="3"] > i:nth-of-type(3),
+[data-digit="3"] > i:nth-of-type(4),
+[data-digit="4"] > i:nth-of-type(2),
+[data-digit="5"] > i:nth-of-type(2),
+[data-digit="5"] > i:nth-of-type(4),
+[data-digit="6"] > i:nth-of-type(2),
+[data-digit="6"] > i:nth-of-type(3),
+[data-digit="7"] > i:nth-of-type(2),
+[data-digit="7"] > i:nth-of-type(3),
+[data-digit="7"] > i:nth-of-type(4),
+[data-digit="8"] > i:nth-of-type(1),
+[data-digit="9"] > i:nth-of-type(1),
+[data-digit="9"] > i:nth-of-type(4)
+{ --active-color: var(--color) }
+
+.binary-clock > span:nth-child(1),
+[data-digit]:nth-of-type(1),
+[data-digit]:nth-of-type(2) { --color: var(--colorH) }
+
+.binary-clock > span:nth-child(2),
+[data-digit]:nth-of-type(3),
+[data-digit]:nth-of-type(4) { --color: var(--colorM) }
+
+.binary-clock > span:nth-child(3),
+[data-digit]:nth-of-type(5),
+[data-digit]:nth-of-type(6) { --color: var(--colorS) }
+
+body { 
+  font-family: system-ui, sans-serif;
+  font-size: 1.5rem;
+  margin: 0; 
+  padding: 2rem; 
+  min-height: 100vh; 
+  background-color: #121212;
+  display: grid; 
+  align-items: center;
+  box-sizing: border-box;
+}
+        </style>
+    </head>
+<body>
+
+<div class="binary-clock">
+  <span>Hours</span><span>Minutes</span><span>Seconds</span>
+  <div data-digit><i></i><i></i><i></i><i></i></div>
+  <div data-digit><i></i><i></i><i></i><i></i></div>
+  <div data-digit><i></i><i></i><i></i><i></i></div>
+  <div data-digit><i></i><i></i><i></i><i></i></div>
+  <div data-digit><i></i><i></i><i></i><i></i></div>
+  <div data-digit><i></i><i></i><i></i><i></i></div>
+</div>
+</body>
+<script>
+
+time();
+
+function time(){
+  const digitEls=document.querySelectorAll(".binary-clock>[data-digit]");
+  const date=new Date();
+  const h=date.getHours();
+  const m=date.getMinutes();
+  const s=date.getSeconds();
+  const digits=[h,m,s].reduce((a,v)=>[...a,...v.toString().padStart(2,"0")],[]);
+  digits.forEach((digit,index)=>digitEls[index].dataset.digit=digit);
+  window.requestAnimationFrame(time);
+}
+</script>
+</html>
